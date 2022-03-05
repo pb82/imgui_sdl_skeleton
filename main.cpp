@@ -11,6 +11,8 @@
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_sdlrenderer.h"
 
+#include "config.h"
+
 typedef std::tuple<SDL_Window *, SDL_Renderer *> Gfx;
 
 Gfx initSdl() {
@@ -26,8 +28,8 @@ Gfx initSdl() {
             "SDL + IMGui Skeleton",
             SDL_WINDOWPOS_CENTERED,
             SDL_WINDOWPOS_CENTERED,
-            800,
-            600,
+            configWindowWidth,
+            configWindowHeight,
             SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI
     );
 
@@ -35,8 +37,8 @@ Gfx initSdl() {
     // the requested resolution
     int actualW, actualH;
     SDL_GL_GetDrawableSize(window, &actualW, &actualH);
-    float scaleX = actualW / 800;
-    float scaleY = actualH / 600;
+    float scaleX = actualW / configWindowWidth;
+    float scaleY = actualH / configWindowHeight;
 
     auto renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     SDL_RenderSetScale(renderer, scaleX, scaleY);
@@ -57,7 +59,7 @@ void initImgui(Gfx gfx) {
 }
 
 void loop(Gfx gfx) {
-    float targetFrametime = (1 / 60.0f) * 1000;
+    float targetFrametime = (1 / configTargetFps) * 1000;
 
     auto renderer = std::get<1>(gfx);
     auto window = std::get<0>(gfx);
@@ -66,7 +68,7 @@ void loop(Gfx gfx) {
     bool run = true;
 
     std::deque<float> frametimes;
-    frametimes.resize(120);
+    frametimes.resize(configTargetFps * 2);
     std::fill(frametimes.begin(), frametimes.end(), 0.0f);
 
     int r = 0, g = 0, b = 0;
@@ -110,7 +112,7 @@ void loop(Gfx gfx) {
                 ImGui::PlotLines("", [](void *d, int i) -> float {
                     auto ft = static_cast<std::deque<float> *>(d);
                     return ft->at(i);
-                }, &frametimes, frametimes.size(), 0, nullptr, 0, 16, {240, 60});
+                }, &frametimes, frametimes.size(), 0, nullptr, 0, targetFrametime, {240, 60});
                 ImGui::PopStyleColor();
                 ImGui::Spacing();
                 ImGui::Spacing();
