@@ -15,7 +15,7 @@ add_executable(
         imgui/imgui_impl_sdlrenderer.cpp
         imgui/imgui_tables.cpp
         imgui/imgui_widgets.cpp
-        config.h)
+        config.h overlays/performance.cpp overlays/performance.h)
 
 target_include_directories(
         skeleton

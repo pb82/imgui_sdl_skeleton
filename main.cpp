@@ -12,6 +12,7 @@
 #include "imgui_impl_sdlrenderer.h"
 
 #include "config.h"
+#include "overlays/performance.h"
 
 typedef std::tuple<SDL_Window *, SDL_Renderer *> Gfx;
 
@@ -62,21 +63,15 @@ void loop(Gfx gfx) {
     float targetFrametime = (1 / configTargetFps) * 1000;
 
     auto renderer = std::get<1>(gfx);
-    auto window = std::get<0>(gfx);
 
     SDL_Event event;
+    overlays::Performance perfOverlay(2);
+
     bool run = true;
-
-    std::deque<float> frametimes;
-    frametimes.resize(configTargetFps * 2);
-    std::fill(frametimes.begin(), frametimes.end(), 0.0f);
-
-    int r = 0, g = 0, b = 0;
-
     while (run) {
         auto frameStart = std::chrono::system_clock::now();
 
-        SDL_SetRenderDrawColor(renderer, r, g, b, 255);
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
 
         while (SDL_PollEvent(&event)) {
@@ -97,33 +92,7 @@ void loop(Gfx gfx) {
 
         // ImGui Draws
         {
-            ImGui::SetNextWindowPos({0, 0});
-            ImGui::Begin("Performance", nullptr,
-                         ImGuiWindowFlags_NoCollapse |
-                         ImGuiWindowFlags_NoMove |
-                         ImGuiWindowFlags_NoResize |
-                         ImGuiWindowFlags_NoBackground |
-                         ImGuiWindowFlags_NoDecoration);
-            {
-                ImGui::Text("Frametime");
-                ImGui::Spacing();
-                ImGui::Spacing();
-                ImGui::PushStyleColor(ImGuiCol_PlotLines, {255, 0, 0, 255});
-                ImGui::PlotLines("", [](void *d, int i) -> float {
-                    auto ft = static_cast<std::deque<float> *>(d);
-                    return ft->at(i);
-                }, &frametimes, frametimes.size(), 0, nullptr, 0, targetFrametime, {240, 60});
-                ImGui::PopStyleColor();
-                ImGui::Spacing();
-                ImGui::Spacing();
-                ImGui::Text("Fps: %.0f", ImGui::GetIO().Framerate);
-            }
-            ImGui::End();
-            ImGui::Begin("Clear color");
-            ImGui::SliderInt("R", &r, 0, 255);
-            ImGui::SliderInt("G", &g, 0, 255);
-            ImGui::SliderInt("B", &b, 0, 255);
-            ImGui::End();
+            perfOverlay.render();
         }
 
         ImGui::Render();
@@ -135,8 +104,7 @@ void loop(Gfx gfx) {
         float millis = std::chrono::duration_cast<std::chrono::milliseconds>(frameTime).count();
         float delay = targetFrametime - millis;
         if (delay > 0) SDL_Delay(delay);
-        frametimes.push_back(millis);
-        frametimes.pop_front();
+        perfOverlay.add(millis);
     }
 }
 
