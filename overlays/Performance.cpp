@@ -1,4 +1,4 @@
-#include "performance.h"
+#include "Performance.h"
 
 #include "imgui.h"
 #include "../config.h"

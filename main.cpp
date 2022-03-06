@@ -2,7 +2,6 @@
 
 #include <tuple>
 #include <chrono>
-#include <queue>
 
 #include <SDL.h>
 #include <SDL_image.h>
@@ -12,7 +11,8 @@
 #include "imgui_impl_sdlrenderer.h"
 
 #include "config.h"
-#include "overlays/performance.h"
+#include "overlays/Performance.h"
+#include "statemachine/Stm.h"
 
 typedef std::tuple<SDL_Window *, SDL_Renderer *> Gfx;
 
@@ -26,7 +26,7 @@ Gfx initSdl() {
     }
 
     auto window = SDL_CreateWindow(
-            "SDL + IMGui Skeleton",
+            "SDL + ImGui Skeleton",
             SDL_WINDOWPOS_CENTERED,
             SDL_WINDOWPOS_CENTERED,
             configWindowWidth,
@@ -66,6 +66,7 @@ void loop(Gfx gfx) {
 
     SDL_Event event;
     overlays::Performance perfOverlay(2);
+    statemachine::Stm stm(statemachine::Menu);
 
     bool run = true;
     while (run) {
