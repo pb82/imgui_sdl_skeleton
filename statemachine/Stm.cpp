@@ -16,7 +16,7 @@ namespace statemachine {
         if (possiblePaths.at(currentState).empty()) {
             return false;
         }
-        for (auto path: possiblePaths.at(to)) {
+        for (auto path: possiblePaths.at(currentState)) {
             if (path == to) {
                 currentState = to;
                 return true;

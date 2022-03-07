@@ -17,17 +17,37 @@ add_executable(
         imgui/imgui_widgets.cpp
         config.h overlays/Performance.cpp overlays/Performance.h statemachine/Stm.cpp statemachine/Stm.h)
 
-target_include_directories(
-        skeleton
-        PRIVATE ${skeleton_SOURCE_DIR}/imgui
-        PRIVATE ${skeleton_SOURCE_DIR}/sdl/linux
-)
+if(UNIX AND NOT APPLE)
+    target_include_directories(
+            skeleton
+            PRIVATE ${skeleton_SOURCE_DIR}/imgui
+            PRIVATE ${skeleton_SOURCE_DIR}/sdl/linux
+    )
 
-find_package(SDL2 REQUIRED)
-find_package(SDL2_image REQUIRED)
+    find_package(SDL2 REQUIRED)
+    find_package(SDL2_image REQUIRED)
 
-target_link_libraries(
-        skeleton
-        PRIVATE ${SDL2_LIBRARY}
-        PRIVATE ${SDL2_IMAGE_LIBRARIES}
-)
+    target_link_libraries(
+            skeleton
+            PRIVATE ${SDL2_LIBRARY}
+            PRIVATE ${SDL2_IMAGE_LIBRARIES}
+    )
+endif()
+
+if(WIN32)
+    target_include_directories(
+            skeleton
+            PRIVATE ${skeleton_SOURCE_DIR}/imgui
+            PRIVATE ${skeleton_SOURCE_DIR}/vendor/include/sdl/windows
+            PRIVATE ${skeleton_SOURCE_DIR}/vendor/include/sdl_image/windows
+    )
+
+    target_link_libraries(
+            skeleton
+            PRIVATE ${skeleton_SOURCE_DIR}/vendor/lib/sdl/win64/SDL2.dll
+            PRIVATE ${skeleton_SOURCE_DIR}/vendor/lib/sdl_image/win64/SDL2_image.dll
+            PRIVATE ${skeleton_SOURCE_DIR}/vendor/lib/sdl_image/win64/libpng16-16.dll
+            PRIVATE ${skeleton_SOURCE_DIR}/vendor/lib/sdl_image/win64/zlib1.dll
+    )
+endif()
+
