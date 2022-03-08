@@ -54,7 +54,7 @@ void initImgui(Gfx gfx) {
     ImGui::CreateContext();
     ImGui::StyleColorsDark();
     ImGui::GetIO().IniFilename = nullptr;
-    ImGui::GetIO().Fonts->AddFontFromFileTTF("./assets/font.ttf", 16);
+    ImGui::GetIO().Fonts->AddFontFromFileTTF("../assets/font.ttf", 16);
 
     ImGui_ImplSDL2_InitForSDLRenderer(std::get<0>(gfx), std::get<1>(gfx));
     ImGui_ImplSDLRenderer_Init(std::get<1>(gfx));

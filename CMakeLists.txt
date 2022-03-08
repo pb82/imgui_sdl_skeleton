@@ -49,5 +49,20 @@ if(WIN32)
             PRIVATE ${skeleton_SOURCE_DIR}/vendor/lib/sdl_image/win64/libpng16-16.dll
             PRIVATE ${skeleton_SOURCE_DIR}/vendor/lib/sdl_image/win64/zlib1.dll
     )
+
+    add_custom_command(TARGET skeleton
+            POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:skeleton> ${skeleton_SOURCE_DIR}/bin
+
+            COMMAND ${CMAKE_COMMAND} -E copy ${skeleton_SOURCE_DIR}/vendor/lib/sdl/win64/SDL2.dll ${skeleton_SOURCE_DIR}/bin
+
+            COMMAND ${CMAKE_COMMAND} -E copy ${skeleton_SOURCE_DIR}/vendor/lib/sdl_image/win64/SDL2_image.dll ${skeleton_SOURCE_DIR}/bin
+            COMMAND ${CMAKE_COMMAND} -E copy ${skeleton_SOURCE_DIR}/vendor/lib/sdl_image/win64/libpng16-16.dll ${skeleton_SOURCE_DIR}/bin
+            COMMAND ${CMAKE_COMMAND} -E copy ${skeleton_SOURCE_DIR}/vendor/lib/sdl_image/win64/zlib1.dll ${skeleton_SOURCE_DIR}/bin
+
+            COMMAND ${CMAKE_COMMAND} -E copy ${skeleton_SOURCE_DIR}/vendor/lib/mingw/win64/libgcc_s_seh-1.dll ${skeleton_SOURCE_DIR}/bin
+            COMMAND ${CMAKE_COMMAND} -E copy ${skeleton_SOURCE_DIR}/vendor/lib/mingw/win64/libstdc++-6.dll ${skeleton_SOURCE_DIR}/bin
+            COMMAND ${CMAKE_COMMAND} -E copy ${skeleton_SOURCE_DIR}/vendor/lib/mingw/win64/libwinpthread-1.dll ${skeleton_SOURCE_DIR}/bin
+            )
 endif()
 
