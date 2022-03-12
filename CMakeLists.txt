@@ -21,7 +21,8 @@ if(UNIX AND NOT APPLE)
     target_include_directories(
             skeleton
             PRIVATE ${skeleton_SOURCE_DIR}/imgui
-            PRIVATE ${skeleton_SOURCE_DIR}/sdl/linux
+            PRIVATE ${skeleton_SOURCE_DIR}/vendor/include/sdl/linux
+            PRIVATE ${skeleton_SOURCE_DIR}/vendor/include/sdl_image/linux
     )
 
     find_package(SDL2 REQUIRED)
@@ -32,6 +33,12 @@ if(UNIX AND NOT APPLE)
             PRIVATE ${SDL2_LIBRARY}
             PRIVATE ${SDL2_IMAGE_LIBRARIES}
     )
+
+    add_custom_command(TARGET skeleton
+            POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:skeleton> ${skeleton_SOURCE_DIR}/bin
+            )
+
 endif()
 
 if(WIN32)
