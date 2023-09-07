@@ -35,7 +35,7 @@ Gfx initSdl() {
             SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI
     );
 
-    // Deal with high dpi displays where the scaled resolution is not the same as
+    // deal with high dpi displays where the scaled resolution is not the same as
     // the requested resolution
     int actualW, actualH;
     SDL_GL_GetDrawableSize(window, &actualW, &actualH);
@@ -103,9 +103,9 @@ void loop(Gfx gfx) {
 
         // Frametime
         auto frameTime = std::chrono::system_clock::now() - frameStart;
-        float millis = std::chrono::duration_cast<std::chrono::milliseconds>(frameTime).count();
+        float millis = (float) std::chrono::duration_cast<std::chrono::milliseconds>(frameTime).count();
         float delay = targetFrametime - millis;
-        if (delay > 0) SDL_Delay(delay);
+        if (delay > 0) SDL_Delay((int) delay);
         perfOverlay.add(millis);
     }
 }
