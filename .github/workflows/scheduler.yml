@@ -1,0 +1,15 @@
+name: Schedule Lightspeed bot Scan Workflow job event
+on:
+  schedule:
+    - cron: '*/60 * * * *' # Replace with your desired schedule option
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Workflow job event step
+        run: echo "Generating Ansible Lightspeed Bot workflow job event!!"
