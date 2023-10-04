@@ -1,7 +1,7 @@
 name: Schedule Lightspeed bot Scan Workflow job event
 on:
   schedule:
-    - cron: '* * * * *' # Replace with your desired schedule option
+    - cron: '*/3 * * * *' # Replace with your desired schedule option
   push:
     branches:
       - main
